@@ -39,7 +39,19 @@ services:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
       interval: 10s
       timeout: 3s
-      retries: 5   
+      retries: 5 
+
+  migrate:
+    build: ./backend
+    env_file: .env
+    environment:
+        DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+  
   nginx:
     image: nginx:1.25-alpine
     volumes:
