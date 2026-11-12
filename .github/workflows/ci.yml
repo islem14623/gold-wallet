@@ -33,4 +33,26 @@ jobs:
           push: false
           tags: gold-wallet-backend:ci
           cache-from: type=gha
-          cache-to: type=gha,mode=max      
+          cache-to: type=gha,mode=max
+
+  integration:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create .env for CI
+        run: |
+          cat > .env <<EOF
+          POSTGRES_USER=gold
+          POSTGRES_PASSWORD=$(openssl rand -hex 16)
+          POSTGRES_DB=goldwallet
+          REDIS_PASSWORD=$(openssl rand -hex 16)
+          JWT_SECRET=$(openssl rand -hex 32)
+          EOF
+      - name: Start the stack
+        run: docker compose up -d --build --wait
+      - name: Run API tests
+        run: ./test-api.sh
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail 50
