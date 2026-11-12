@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BASE=http://127.0.0.1:8080
-EMAIL=islem@example.com
+EMAIL="user-$(date +%s)@example.com"
 PASS=TestPass12345
 KEY="test-$(date +%s)"
 JSON="Content-Type: application/json"
