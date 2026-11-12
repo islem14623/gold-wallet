@@ -49,8 +49,10 @@ jobs:
           REDIS_PASSWORD=$(openssl rand -hex 16)
           JWT_SECRET=$(openssl rand -hex 32)
           EOF
+      - name: run database migrations
+        run: docker compose run --rm migrate    
       - name: Start the stack
-        run: docker compose up -d --build --wait
+        run: docker compose up -d --build --wait db redis backend nginx
       - name: Run API tests
         run: ./test-api.sh
       - name: Show logs on failure
