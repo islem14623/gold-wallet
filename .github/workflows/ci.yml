@@ -14,9 +14,9 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: backend/requirements.txt
+          cache-dependency-path: backend/requirements-dev.txt
       - name: Install packages
-        run: pip install -r backend/requirements.txt
+        run: pip install -r backend/requirements-dev.txt
       - name: Run tests
         working-directory: backend
         run: pytest
@@ -36,7 +36,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   integration:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestdocker compose up -d --wait db redis backend nginxdocker compose up -d --wait db redis backend nginx
     needs: build
     steps:
       - uses: actions/checkout@v4
