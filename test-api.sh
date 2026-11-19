@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE=http://127.0.0.1:8080
+BASE=${BASE:-http://127.0.0.1:8080}
 EMAIL="user-$(date +%s)@example.com"
 PASS=TestPass12345
 KEY="test-$(date +%s)"
