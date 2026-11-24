@@ -8,8 +8,7 @@ KEY=~/.ssh/gold-server
 scp -i "$KEY" docker-compose.prod.yml "$SERVER":~/gold-wallet/docker-compose.yml
 ssh -i "$KEY" "$SERVER" "
   cd ~/gold-wallet &&
-  sed -i '/^TAG=/d' .env &&
-  echo 'TAG=$TAG' >> .env &&
+  export TAG='$TAG' &&
   docker compose pull &&
   docker compose run --rm migrate &&
   docker compose up -d --wait db redis backend nginx &&
